@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Listagem de Ações</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <h1>Listagem de Ações</h1>
+    <div id="mensagem-sucesso" class="alert alert-success" role="alert" style="display: none;">
+      Ações importadas com sucesso!
+    </div>
+    <div class="input-group mb-3">
+      <input type="text" id="pesquisa" class="form-control" placeholder="Pesquisar ações" aria-label="Pesquisar ações" aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" onclick="pesquisarAcoes()">Pesquisar</button>
+      </div>
+    </div>
+    <button class="btn btn-success" onclick="iniciar()">Importar Ações</button>
+    <button class="btn btn-danger" onclick="limparDados()">Limpar Dados</button>
+    <button class="btn btn-info" onclick="listarLogs()">Listar Logs</button>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Simbolo</th>
+          <th>Nome</th>
+          <th>Preço</th>
+          <th>Variação</th>
+          <th>Data Atualização</th>
+          <th>#</th>
+          <th>#</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaAcoes">
+      </tbody>
+    </table>
+
+    <!-- Modais -->
+
+    <table id="logTable">
+
+  </table>
+  <div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logModalLabel">Logs</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table id="logTable">
+                   
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+  
+  </div>
+  <div class="modal fade" id="modalAcao" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="tituloAcao">Alterar Ação</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="form-group">
+            <label for="idacao">Código</label>
+            <input type="text" id="idacao" class="form-control">
+            <label for="simbolo">Símbolo</label>
+            <input type="text" id="simbolo" class="form-control">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" class="form-control">
+            <label for="preco">Preço</label>
+            <input type="text" id="preco" class="form-control">
+            <label for="variacao">Variação</label>
+            <input type="text" id="variacao" class="form-control">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-primary" onclick="salvarAcao()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="app.js"></script>
+  <script>
+    async function limparDados() {
+    if (confirm("Tem certeza que deseja limpar todos os dados?")) {
+        const url = './php/limpar_banco.php';
+        try {
+            console.log('Enviando requisição POST para:', url);
+            const response = await fetch(url, { method: 'POST' });
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                alert(result.message);
+                document.getElementById('tabelaAcoes').innerHTML = '';
+            } else {
+                alert('Erro ao limpar dados: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Erro ao limpar dados:', error);
+            alert('Erro ao limpar dados.');
+        }
+    }
+}
+  </script>
+</body>
+</html>
